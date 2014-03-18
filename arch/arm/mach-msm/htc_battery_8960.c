@@ -429,7 +429,13 @@ int htc_charger_event_notify(enum htc_charger_event event)
 		if (get_kernel_flag() & KERNEL_FLAG_ENABLE_FAST_CHARGE)
 			latest_chg_src = CHARGER_AC;
 		else
-		if ((get_kernel_flag() & KERNEL_FLAG_ENABLE_FAST_CHARGE) || force_fast_charge == 1)
+		if (force_fast_charge == 1) {
+			printk("[FASTCHARGE] Forcing CHARGER_AC");
+			latest_chg_src = CHARGER_AC;
+		} else {
+			printk("[FASTCHARGE] NOT set, using normal CHARGER_USB");
+			latest_chg_src = CHARGER_USB;
+		}
 		htc_batt_schedule_batt_info_update();
 		break;
 	case HTC_CHARGER_EVENT_OVP:
